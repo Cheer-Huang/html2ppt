@@ -27,7 +27,7 @@ from html2img import html_to_images
 from img2ppt import images_to_pptx
 
 
-def html_to_pptx(html_path, output_pptx=None, width=1280, height=720):
+def html_to_pptx(html_path, output_pptx=None, width=1280, height=720, scale=2):
     """
     一键将 HTML 转为 PPTX。
     
@@ -36,6 +36,7 @@ def html_to_pptx(html_path, output_pptx=None, width=1280, height=720):
         output_pptx: 输出 PPTX 路径（默认为同名 .pptx）
         width: 截图宽度像素
         height: 截图高度像素
+        scale: 设备像素比（默认2x，确保高清不糊）
     """
     html_path = os.path.abspath(html_path)
     
@@ -44,29 +45,29 @@ def html_to_pptx(html_path, output_pptx=None, width=1280, height=720):
         output_pptx = base + ".pptx"
     
     print("=" * 60)
-    print("HTML → PPT 一键转换")
+    print("HTML -> PPT 一键转换")
     print("=" * 60)
     print(f"输入: {html_path}")
     print(f"输出: {output_pptx}")
-    print(f"尺寸: {width}x{height}px")
+    print(f"尺寸: {width}x{height}px @{scale}x")
     print()
     
-    # Step 1: HTML → PNG
+    # Step 1: HTML -> PNG
     print("-" * 40)
-    print("Step 1: HTML → PNG 截图")
+    print("Step 1: HTML -> PNG 截图")
     print("-" * 40)
     
     with tempfile.TemporaryDirectory() as tmp_dir:
-        png_files = html_to_images(html_path, tmp_dir, width, height)
+        png_files = html_to_images(html_path, tmp_dir, width, height, scale)
         
         if not png_files:
             print("错误: 截图失败，未生成任何图片", file=sys.stderr)
             sys.exit(1)
         
-        # Step 2: PNG → PPTX
+        # Step 2: PNG -> PPTX
         print()
         print("-" * 40)
-        print("Step 2: PNG → PPTX 组装")
+        print("Step 2: PNG -> PPTX 组装")
         print("-" * 40)
         
         images_to_pptx(png_files, output_pptx, width, height)
@@ -88,15 +89,17 @@ def main():
     python html2ppt.py slides.html
     python html2ppt.py slides.html output.pptx
     python html2ppt.py slides.html output.pptx --width 1920 --height 1080
+    python html2ppt.py slides.html output.pptx --scale 3
         """,
     )
     parser.add_argument("input", help="HTML 文件路径")
     parser.add_argument("output", nargs="?", help="输出 PPTX 路径（默认同名.pptx）")
-    parser.add_argument("--width", type=int, default=1280, help="截图宽度像素（默认1280）")
-    parser.add_argument("--height", type=int, default=720, help="截图高度像素（默认720）")
+    parser.add_argument("--width", type=int, default=1280, help="幻灯片宽度像素（默认1280）")
+    parser.add_argument("--height", type=int, default=720, help="幻灯片高度像素（默认720）")
+    parser.add_argument("--scale", type=int, default=2, help="设备像素比（默认2x高清，3x超清）")
     
     args = parser.parse_args()
-    html_to_pptx(args.input, args.output, args.width, args.height)
+    html_to_pptx(args.input, args.output, args.width, args.height, args.scale)
 
 
 if __name__ == "__main__":

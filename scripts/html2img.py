@@ -67,7 +67,7 @@ def extract_slides_from_html(html_path):
     return "full_page"
 
 
-def generate_screenshot_js(html_path, output_dir, slide_mode):
+def generate_screenshot_js(html_path, output_dir, slide_mode, width=1280, height=720):
     """
     生成 JavaScript 文件，用 Chrome 的 Puppeteer-like 方式截图。
     但我们用纯 Chrome headless --screenshot 方式，更简单。
@@ -108,7 +108,7 @@ def generate_screenshot_js(html_path, output_dir, slide_mode):
 {head_content}
 <style>
 body {{ margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }}
-.slide {{ width: 1280px; height: 720px; overflow: hidden; }}
+.slide {{ width: {width}px; height: {height}px; overflow: hidden; }}
 </style>
 </head>
 <body>
@@ -125,8 +125,10 @@ body {{ margin: 0; padding: 0; display: flex; justify-content: center; align-ite
     return slides_info
 
 
-def screenshot_with_chrome(chrome_path, html_path, output_png, width=1280, height=720):
-    """使用 Chrome headless 截图"""
+def screenshot_with_chrome(chrome_path, html_path, output_png, width=1280, height=720, scale=2):
+    """使用 Chrome headless 截图
+    scale: 设备像素比（默认2x，确保高清不糊）
+    """
     file_url = f"file://{os.path.abspath(html_path)}"
     cmd = [
         chrome_path,
@@ -135,6 +137,7 @@ def screenshot_with_chrome(chrome_path, html_path, output_png, width=1280, heigh
         "--no-sandbox",
         "--hide-scrollbars",
         f"--window-size={width},{height}",
+        f"--force-device-scale-factor={scale}",
         f"--screenshot={os.path.abspath(output_png)}",
         file_url,
     ]
@@ -142,7 +145,7 @@ def screenshot_with_chrome(chrome_path, html_path, output_png, width=1280, heigh
     return result.returncode == 0
 
 
-def html_to_images(html_path, output_dir=None, width=1280, height=720):
+def html_to_images(html_path, output_dir=None, width=1280, height=720, scale=2):
     """
     将 HTML 文件转为 PNG 图片序列。
     
@@ -151,6 +154,7 @@ def html_to_images(html_path, output_dir=None, width=1280, height=720):
         output_dir: 输出目录（默认为 HTML 同目录下的 slides/）
         width: 截图宽度（默认 1280，对应 16:9）
         height: 截图高度（默认 720）
+        scale: 设备像素比（默认 2x，输出图片实际分辨率为 width*scale x height*scale）
     
     返回:
         list of PNG 文件路径
@@ -167,17 +171,19 @@ def html_to_images(html_path, output_dir=None, width=1280, height=720):
         print("错误: 未找到 Chrome/Chromium，请安装 Google Chrome。", file=sys.stderr)
         sys.exit(1)
     
+    actual_w = width * scale
+    actual_h = height * scale
     print(f"Chrome 路径: {chrome_path}")
     print(f"HTML 文件: {html_path}")
     print(f"输出目录: {output_dir}")
-    print(f"截图尺寸: {width}x{height}")
+    print(f"截图尺寸: {width}x{height} @{scale}x -> 实际 {actual_w}x{actual_h}px")
     
     # 检测 slide 模式
     slide_mode = extract_slides_from_html(html_path)
     print(f"检测到模式: {slide_mode}")
     
     # 生成截图任务
-    slides_info = generate_screenshot_js(html_path, output_dir, slide_mode)
+    slides_info = generate_screenshot_js(html_path, output_dir, slide_mode, width, height)
     
     print(f"\n共 {len(slides_info)} 页，开始截图...")
     
@@ -186,7 +192,7 @@ def html_to_images(html_path, output_dir=None, width=1280, height=720):
         out_path = os.path.join(output_dir, out_png)
         print(f"  [{i+1}/{len(slides_info)}] {out_png}...", end=" ", flush=True)
         
-        if screenshot_with_chrome(chrome_path, src_html, out_path, width, height):
+        if screenshot_with_chrome(chrome_path, src_html, out_path, width, height, scale):
             print("✓")
             png_files.append(out_path)
         else:
@@ -205,13 +211,15 @@ def html_to_images(html_path, output_dir=None, width=1280, height=720):
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("用法: python html2img.py <input.html> [output_dir] [width] [height]")
-        print("示例: python html2img.py slides.html slides/ 1280 720")
+        print("用法: python html2img.py <input.html> [output_dir] [width] [height] [scale]")
+        print("示例: python html2img.py slides.html slides/ 1280 720 2")
+        print("默认: 1280x720 @2x -> 实际输出 2560x1440px（高清）")
         sys.exit(1)
     
     html_path = sys.argv[1]
     output_dir = sys.argv[2] if len(sys.argv) > 2 else None
     width = int(sys.argv[3]) if len(sys.argv) > 3 else 1280
     height = int(sys.argv[4]) if len(sys.argv) > 4 else 720
+    scale = int(sys.argv[5]) if len(sys.argv) > 5 else 2
     
-    html_to_images(html_path, output_dir, width, height)
+    html_to_images(html_path, output_dir, width, height, scale)

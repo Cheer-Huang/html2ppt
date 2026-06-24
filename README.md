@@ -1,22 +1,41 @@
 # html2ppt
 
-> AI 生成 HTML 幻灯片，一键转为高保真 PowerPoint
+> AI 生成 HTML 幻灯片，截图转为高保真 PowerPoint (.pptx)
 
-## 为什么需要这个工具
+## 使用场景
 
-用 AI 生成 PPT 时，直接用 python-pptx 写代码生成幻灯片，排版能力有限——字体、渐变、布局很难精确控制。
+你遇到过这些情况吗？
 
-**html2ppt** 换了个思路：让 AI 发挥 HTML/CSS 的排版能力生成幻灯片页面，再用 Chrome headless 截图后组装为 PPT。100% 还原 HTML 渲染效果，所见即所得。
+- **老师/会议要求提交 .pptx 文件**，但你用 AI 生成 PPT 时，直接用 python-pptx 写代码排版能力有限——字体、渐变、布局很难精确控制
+- **AI 直接生成 PPT 效果不理想**：默认蓝色标题、丑陋的列表样式、表格没有设计感，和你在网页上看到的精美幻灯片差距很大
+- **用 AI 写 HTML/CSS 做幻灯片效果很好**，但 HTML 没法直接当 PPT 提交，手动截图再粘贴到 PPT 里太繁琐
+- **答辩/汇报场景需要 .pptx 文件**，但又想保持网页级的设计质量
 
-## 工作流程
+## 解决方案
+
+**html2ppt** 的思路：让 AI 发挥 HTML/CSS 的排版能力生成幻灯片页面，再用 Chrome headless 截图后组装为 PPTX。100% 还原 HTML 渲染效果，所见即所得。
 
 ```
-1. AI 生成 HTML（可反复迭代，浏览器预览）
-2. Chrome headless 逐页截图为 PNG
-3. python-pptx 组装为 PPTX
+AI 生成 HTML 幻灯片（可反复迭代，浏览器预览效果）
+        ↓
+Chrome headless 逐页截图为 PNG
+        ↓
+python-pptx 组装为 .pptx 文件
 ```
 
-步骤 1 是 AI 的创意工作，步骤 2-3 是确定性脚本。
+**第一步是 AI 的创意工作**——可以反复修改 HTML 直到浏览器中预览满意为止。
+**后两步是确定性脚本**——一键运行，不依赖 AI，结果稳定可靠。
+
+## 与其他方案的对比
+
+| 方案 | 排版能力 | 输出格式 | 可迭代 | 保真度 |
+|------|---------|---------|--------|--------|
+| python-pptx 直接生成 | 弱（代码控制布局） | .pptx | 差 | 低 |
+| AI 生成 HTML 浏览器演示 | 强（CSS/HTML） | .html | 好 | — |
+| html-ppt-skill 等纯 HTML 方案 | 强（CSS/动画） | .html | 好 | — |
+| **html2ppt（本工具）** | **强（CSS/HTML）** | **.pptx** | **好** | **100%** |
+
+> 如果你不需要提交 .pptx 文件，纯 HTML 方案（如 [html-ppt-skill](https://github.com/lewislulu/html-ppt-skill)）已经够用。当你**必须交 .pptx** 时，html2ppt 是最佳选择。
 
 ## 两种使用方式
 

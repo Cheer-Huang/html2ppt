@@ -29,6 +29,9 @@ screenshot capture and PPTX assembly.
 
 Generate an HTML file where each slide is wrapped in `<section class="slide">`.
 Refer to `references/html_slide_template.md` for the template structure and CSS.
+For high-quality visual styles, browse `assets/github-styles/README.md` which
+collects MIT-licensed slide templates from GitHub (minimal, cyberpunk, academic,
+glassmorphism, etc.).
 
 Key rules for the HTML:
 1. Each slide must be a `<section class="slide">` element

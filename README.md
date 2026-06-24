@@ -111,6 +111,10 @@ python scripts/html2ppt.py slides.html output.pptx --width 1920 --height 1080
 
 完整模板见 [references/html_slide_template.md](references/html_slide_template.md)，包含标题页、内容页、两栏页、表格页、代码页等样式。
 
+### 高质量风格模板
+
+不想从零写 CSS？[assets/github-styles/](assets/github-styles/) 收集了 GitHub 上高质量开源幻灯片模板（均 MIT 许可），涵盖极简、赛博朋克、学术论文、玻璃拟态等 36+ 种风格，可直接提取样式使用。
+
 ## 功能一览
 
 | 功能 | 说明 |

@@ -1,5 +1,9 @@
 # html2ppt
 
+<p align="center">
+  <img src="assets/hero.png" alt="html2ppt 工作流程" width="600">
+</p>
+
 > AI 生成 HTML 幻灯片，截图转为高保真 PowerPoint (.pptx)
 
 ## 使用场景

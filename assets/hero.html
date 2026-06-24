@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  width: 1200px; height: 400px;
+  background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+  font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.container {
+  display: flex; align-items: center; gap: 0;
+}
+.card {
+  width: 220px; height: 140px;
+  border-radius: 16px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  position: relative;
+  box-shadow: 0 8px 32px rgba(0,0,0,.3);
+}
+.card-icon { font-size: 40px; margin-bottom: 10px; }
+.card-title { font-size: 18px; font-weight: 700; color: #fff; }
+.card-desc { font-size: 12px; color: rgba(255,255,255,.6); margin-top: 4px; }
+
+.card-html {
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+}
+.card-png {
+  background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+}
+.card-pptx {
+  background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+}
+
+.arrow {
+  width: 60px; display: flex; align-items: center; justify-content: center;
+}
+.arrow svg { width: 40px; height: 40px; opacity: .5; }
+
+.title-block {
+  position: absolute; top: 30px; left: 50px;
+}
+.title-block h1 {
+  font-size: 32px; font-weight: 800; color: #fff;
+  letter-spacing: -.02em;
+}
+.title-block h1 .accent { color: #e74c3c; }
+.title-block p {
+  font-size: 14px; color: rgba(255,255,255,.5); margin-top: 6px;
+  font-family: "SF Mono", "Fira Code", monospace;
+}
+
+.badge-row {
+  position: absolute; bottom: 30px; left: 50px;
+  display: flex; gap: 10px;
+}
+.badge {
+  padding: 4px 12px; border-radius: 20px;
+  font-size: 11px; font-weight: 600;
+  background: rgba(255,255,255,.1); color: rgba(255,255,255,.7);
+  border: 1px solid rgba(255,255,255,.15);
+}
+.badge-mit { background: rgba(39,174,96,.2); color: #2ecc71; border-color: rgba(39,174,96,.3); }
+.badge-skill { background: rgba(231,76,60,.2); color: #e74c3c; border-color: rgba(231,76,60,.3); }
+
+.deco-circle {
+  position: absolute; border-radius: 50%; opacity: .08;
+}
+.deco1 { width: 300px; height: 300px; top: -100px; right: -80px; background: #e74c3c; }
+.deco2 { width: 200px; height: 200px; bottom: -60px; left: 200px; background: #27ae60; }
+</style>
+</head>
+<body>
+<div class="deco-circle deco1"></div>
+<div class="deco-circle deco2"></div>
+
+<div class="title-block">
+  <h1>html<span class="accent">2</span>ppt</h1>
+  <p>AI 生成 HTML 幻灯片 → 截图转为高保真 PowerPoint</p>
+</div>
+
+<div class="container">
+  <div class="card card-html">
+    <div class="card-icon">&#128196;</div>
+    <div class="card-title">HTML</div>
+    <div class="card-desc">AI 生成 · 可迭代</div>
+  </div>
+  <div class="arrow">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2">
+      <path d="M5 12h14M13 6l6 6-6 6"/>
+    </svg>
+  </div>
+  <div class="card card-png">
+    <div class="card-icon">&#128247;</div>
+    <div class="card-title">PNG</div>
+    <div class="card-desc">Chrome 截图 · 100% 保真</div>
+  </div>
+  <div class="arrow">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2">
+      <path d="M5 12h14M13 6l6 6-6 6"/>
+    </svg>
+  </div>
+  <div class="card card-pptx">
+    <div class="card-icon">&#128202;</div>
+    <div class="card-title">PPTX</div>
+    <div class="card-desc">python-pptx · 可提交</div>
+  </div>
+</div>
+
+<div class="badge-row">
+  <span class="badge badge-mit">MIT License</span>
+  <span class="badge badge-skill">CodeBuddy / Claude Code / Trae Skill</span>
+  <span class="badge">Chrome Headless</span>
+  <span class="badge">python-pptx</span>
+</div>
+</body>
+</html>

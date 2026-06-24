@@ -4,6 +4,7 @@ __pycache__/
 .DS_Store
 *.pptx
 *.png
+!assets/hero.png
 !slides/example.png
 venv/
 .venv/
